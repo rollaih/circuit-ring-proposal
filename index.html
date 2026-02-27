@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circuit Ring — App & Web Development Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0d0f14;
+      --bg-card: #161921;
+      --bg-card-hover: #1c2029;
+      --accent-green: #00e676;
+      --accent-blue: #00b0ff;
+      --accent-gradient: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+      --text-white: #f0f0f5;
+      --text-muted: #8e92a4;
+      --text-dim: #5a5e70;
+      --border: #2a2d3a;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-white);
+      background: var(--bg-dark);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 15, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+    nav .nav-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    nav .nav-brand .accent {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    nav .nav-brand .dim { color: var(--text-dim); }
+    nav .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    nav .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    nav .nav-links a:hover { color: var(--accent-green); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 230, 118, 0.06) 0%, rgba(0, 176, 255, 0.03) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 230, 118, 0.08);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 32px;
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .hero h1 .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .hero .hero-meta {
+      display: flex;
+      gap: 40px;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .hero .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero .hero-meta .label { color: var(--text-muted); }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    /* ── WHAT WE'LL BUILD ── */
+    .build-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .build-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .build-card:hover {
+      border-color: rgba(0, 230, 118, 0.3);
+      background: var(--bg-card-hover);
+    }
+    .build-card .icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(0, 230, 118, 0.08);
+      border: 1px solid rgba(0, 230, 118, 0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    .build-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .build-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ── DELIVERABLES ── */
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .deliverable-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .deliverable-card:hover {
+      border-color: rgba(0, 176, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    .deliverable-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .deliverable-card ul {
+      list-style: none;
+    }
+    .deliverable-card ul li {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .deliverable-card ul li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 5px;
+      height: 5px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      margin-top: 8px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      text-align: center;
+    }
+    .pricing-section .section-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 56px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+    }
+    .pricing-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pricing-amount .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pricing-note {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+    .pricing-includes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+    .pricing-includes li {
+      list-style: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+    }
+    .pricing-includes li .check {
+      color: var(--accent-green);
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .pricing-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-gradient);
+      color: var(--bg-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 16px 40px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .pricing-cta:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-bar {
+      display: flex;
+      gap: 0;
+      margin-top: 0;
+    }
+    .timeline-step {
+      flex: 1;
+      padding: 28px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .timeline-step:first-child {
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+    .timeline-step:last-child {
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .timeline-step + .timeline-step {
+      border-left: none;
+    }
+    .timeline-step .step-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+    }
+    .timeline-step h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .timeline-step p {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+
+    /* ── CONTACT / FOOTER ── */
+    .contact {
+      text-align: center;
+      padding: 80px 24px 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 12px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+    }
+    .contact-link:hover { color: var(--accent-green); border-color: rgba(0, 230, 118, 0.3); }
+    .contact-link .icon-sm { font-size: 1.1rem; }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--accent-green); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .divider hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      nav .nav-links { display: none; }
+      .build-grid { grid-template-columns: 1fr; }
+      .deliverables-grid { grid-template-columns: 1fr; }
+      .pricing-includes { grid-template-columns: 1fr; }
+      .pricing-card { padding: 40px 28px; }
+      .pricing-amount { font-size: 2.5rem; }
+      .timeline-bar { flex-direction: column; }
+      .timeline-step { border-radius: 0 !important; }
+      .timeline-step + .timeline-step { border-left: 1px solid var(--border); border-top: none; }
+      .hero .hero-meta { flex-direction: column; gap: 12px; align-items: center; }
+      section { padding: 72px 20px; }
+    }
+
+    /* ── FADE-IN ANIMATION ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">
+      <span class="accent">FIG1</span><span class="dim">.AI</span>
+      <span class="dim">×</span>
+      <span>Circuit Ring</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#build">What We'll Build</a></li>
+      <li><a href="#deliverables">Deliverables</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Development Proposal
+    </div>
+    <h1>
+      <span class="gradient-text">Circuit Ring</span><br>
+      App & Web Development
+    </h1>
+    <p class="subtitle">
+      A complete digital platform — mobile app and desktop website — designed to power your fitness community and drive growth.
+    </p>
+    <div class="hero-meta">
+      <span><span class="label">Prepared by</span> Fig1.AI</span>
+      <span><span class="label">For</span> Circuit Ring</span>
+      <span><span class="label">Date</span> February 2026</span>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- WHAT WE'LL BUILD -->
+  <section id="build">
+    <p class="section-label fade-in">What We'll Build</p>
+    <h2 class="section-title fade-in">Two platforms, one seamless experience</h2>
+    <p class="section-desc fade-in">
+      We'll design and develop a native-feel mobile app and a responsive desktop website that work together — sharing the same brand, content, and user experience.
+    </p>
+    <div class="build-grid">
+      <div class="build-card fade-in">
+        <div class="icon">📱</div>
+        <h3>Mobile App</h3>
+        <p>A cross-platform mobile application (iOS & Android) built for on-the-go access to workouts, class schedules, and community features. Fast, intuitive, and built to keep members engaged.</p>
+      </div>
+      <div class="build-card fade-in">
+        <div class="icon">🖥️</div>
+        <h3>Desktop Website</h3>
+        <p>A polished, responsive website that serves as your digital front door — showcasing Circuit Ring's brand, driving new memberships, and giving existing members full account access from any browser.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- DELIVERABLES -->
+  <section id="deliverables">
+    <p class="section-label fade-in">Deliverables</p>
+    <h2 class="section-title fade-in">Everything included</h2>
+    <p class="section-desc fade-in">
+      A complete package covering design, development, and launch — so you can focus on running your business.
+    </p>
+    <div class="deliverables-grid">
+      <div class="deliverable-card fade-in">
+        <h4>Mobile App Features</h4>
+        <ul>
+          <li>Class schedule & booking</li>
+          <li>Workout tracking & logging</li>
+          <li>Push notifications</li>
+          <li>User profiles & progress</li>
+          <li>Community feed / social wall</li>
+          <li>Membership management</li>
+        </ul>
+      </div>
+      <div class="deliverable-card fade-in">
+        <h4>Website Features</h4>
+        <ul>
+          <li>Modern landing & about pages</li>
+          <li>Class schedule & descriptions</li>
+          <li>Membership sign-up flow</li>
+          <li>Trainer / staff profiles</li>
+          <li>Contact & location info</li>
+          <li>SEO-optimized structure</li>
+        </ul>
+      </div>
+      <div class="deliverable-card fade-in">
+        <h4>Included Services</h4>
+        <ul>
+          <li>UI/UX design & prototyping</li>
+          <li>Cross-platform development</li>
+          <li>App Store & Play Store submission</li>
+          <li>Hosting & domain setup</li>
+          <li>Analytics integration</li>
+          <li>30 days post-launch support</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- TIMELINE -->
+  <section id="timeline">
+    <p class="section-label fade-in">Timeline</p>
+    <h2 class="section-title fade-in">From kickoff to launch</h2>
+    <p class="section-desc fade-in">
+      A streamlined process to get you live quickly without cutting corners.
+    </p>
+    <div class="timeline-bar fade-in">
+      <div class="timeline-step">
+        <p class="step-num">Phase 1</p>
+        <h4>Discovery & Design</h4>
+        <p>Weeks 1–2</p>
+      </div>
+      <div class="timeline-step">
+        <p class="step-num">Phase 2</p>
+        <h4>Development</h4>
+        <p>Weeks 3–6</p>
+      </div>
+      <div class="timeline-step">
+        <p class="step-num">Phase 3</p>
+        <h4>Testing & QA</h4>
+        <p>Weeks 7–8</p>
+      </div>
+      <div class="timeline-step">
+        <p class="step-num">Phase 4</p>
+        <h4>Launch</h4>
+        <p>Week 9</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing-section">
+    <p class="section-label fade-in">Investment</p>
+    <h2 class="section-title fade-in">Straightforward pricing</h2>
+    <p class="section-desc fade-in">
+      One package, no hidden fees. Everything you need to launch your digital platform.
+    </p>
+    <div class="pricing-card fade-in">
+      <div class="pricing-amount">
+        <span class="gradient-text">$7,000 – $10,000</span>
+      </div>
+      <p class="pricing-note">Final scope depends on feature complexity and custom design requirements</p>
+      <ul class="pricing-includes">
+        <li><span class="check">✓</span> Mobile app (iOS + Android)</li>
+        <li><span class="check">✓</span> Desktop website</li>
+        <li><span class="check">✓</span> UI/UX design</li>
+        <li><span class="check">✓</span> App store submission</li>
+        <li><span class="check">✓</span> Hosting & domain setup</li>
+        <li><span class="check">✓</span> Analytics integration</li>
+        <li><span class="check">✓</span> 30 days post-launch support</li>
+        <li><span class="check">✓</span> Source code ownership</li>
+      </ul>
+      <a href="mailto:sales@fig1.ai" class="pricing-cta">
+        Get Started →
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <p class="section-label fade-in">Let's Talk</p>
+    <h2 class="section-title fade-in">Ready to build?</h2>
+    <p class="section-desc fade-in" style="margin: 0 auto 0;">
+      Reach out and we'll set up a call to walk through the details.
+    </p>
+    <div class="contact-links fade-in">
+      <a href="mailto:sales@fig1.ai" class="contact-link">
+        <span class="icon-sm">✉</span> sales@fig1.ai
+      </a>
+      <a href="mailto:jim@fig1.ai" class="contact-link">
+        <span class="icon-sm">✉</span> jim@fig1.ai
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <a href="mailto:sales@fig1.ai">Fig1.AI</a> — Prepared for Circuit Ring. Confidential.</p>
+  </footer>
+
+  <!-- SCROLL ANIMATIONS -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

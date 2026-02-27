@@ -372,47 +372,6 @@
       transform: translateY(-1px);
     }
 
-    /* ── TIMELINE ── */
-    .timeline-bar {
-      display: flex;
-      gap: 0;
-      margin-top: 0;
-    }
-    .timeline-step {
-      flex: 1;
-      padding: 28px 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      position: relative;
-    }
-    .timeline-step:first-child {
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
-    .timeline-step:last-child {
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-    .timeline-step + .timeline-step {
-      border-left: none;
-    }
-    .timeline-step .step-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent-green);
-      margin-bottom: 8px;
-    }
-    .timeline-step h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .timeline-step p {
-      color: var(--text-dim);
-      font-size: 0.8rem;
-    }
-
     /* ── CONTACT / FOOTER ── */
     .contact {
       text-align: center;
@@ -479,9 +438,6 @@
       .pricing-includes { grid-template-columns: 1fr; }
       .pricing-card { padding: 40px 28px; }
       .pricing-amount { font-size: 2.5rem; }
-      .timeline-bar { flex-direction: column; }
-      .timeline-step { border-radius: 0 !important; }
-      .timeline-step + .timeline-step { border-left: 1px solid var(--border); border-top: none; }
       .hero .hero-meta { flex-direction: column; gap: 12px; align-items: center; }
       section { padding: 72px 20px; }
     }
@@ -600,39 +556,6 @@
           <li>Analytics integration</li>
           <li>30 days post-launch support</li>
         </ul>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"><hr></div>
-
-  <!-- TIMELINE -->
-  <section id="timeline">
-    <p class="section-label fade-in">Timeline</p>
-    <h2 class="section-title fade-in">From kickoff to launch</h2>
-    <p class="section-desc fade-in">
-      A streamlined process to get you live quickly without cutting corners.
-    </p>
-    <div class="timeline-bar fade-in">
-      <div class="timeline-step">
-        <p class="step-num">Phase 1</p>
-        <h4>Discovery & Design</h4>
-        <p>Weeks 1–2</p>
-      </div>
-      <div class="timeline-step">
-        <p class="step-num">Phase 2</p>
-        <h4>Development</h4>
-        <p>Weeks 3–6</p>
-      </div>
-      <div class="timeline-step">
-        <p class="step-num">Phase 3</p>
-        <h4>Testing & QA</h4>
-        <p>Weeks 7–8</p>
-      </div>
-      <div class="timeline-step">
-        <p class="step-num">Phase 4</p>
-        <h4>Launch</h4>
-        <p>Week 9</p>
       </div>
     </div>
   </section>
